@@ -3,6 +3,7 @@ YOLOv8-Seg Vehicle Segmentation Inference (Singleton).
 Load model once; segment vehicles and crop by mask.
 """
 from pathlib import Path
+import os
 import cv2
 import numpy as np
 
@@ -10,10 +11,26 @@ _SEG_MODEL = None
 
 
 def _model_path() -> Path:
+    """
+    Resolve segmentation model path.
+    Priority: ENV var > ai/models/vehicle_seg.pt > ai/vehicle_segmentation.pt > legacy paths
+    """
+    # First check ENV variable
+    env_path = os.getenv("YOLO_SEG_MODEL_PATH")
+    if env_path:
+        p = Path(env_path)
+        if not p.is_absolute():
+            # Relative to repo root
+            p = Path(__file__).resolve().parents[1] / env_path
+        if p.exists():
+            return p
+    
     repo = Path(__file__).resolve().parents[1]
     candidates = [
+        Path(__file__).resolve().parent / "models" / "vehicle_seg.pt",
         Path(__file__).resolve().parent / "models" / "vehicle_segmentation.pt",
         Path(__file__).resolve().parent / "models" / "best.pt",
+        Path(__file__).resolve().parent / "vehicle_segmentation.pt",
         Path(__file__).resolve().parent / "best.pt",
         repo / "model" / "vehicle_segmentation.pt",
         repo / "models" / "vehicle_segmentation.pt",
@@ -22,7 +39,7 @@ def _model_path() -> Path:
         if p.exists():
             return p
     raise FileNotFoundError(
-        "YOLOv8-Seg model not found. Add ai/models/vehicle_segmentation.pt or ai/best.pt."
+        "YOLOv8-Seg model not found. Set YOLO_SEG_MODEL_PATH or add ai/models/vehicle_seg.pt."
     )
 
 

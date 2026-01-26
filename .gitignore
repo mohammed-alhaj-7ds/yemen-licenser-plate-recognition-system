@@ -25,8 +25,8 @@ wheels/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
-/backend/staticfiles/
-/backend/media/
+/staticfiles/
+/media/
 
 # Node
 node_modules/
@@ -61,10 +61,13 @@ Thumbs.db
 
 # Training artifacts
 runs/
-output/debug_gov/
-output/logs/
+output/
 *.pt
-!ai/best.pt
+!ai/models/.gitkeep
+
+# Models - Ignore all but keep directory structure if needed
+ai/models/*
+!ai/models/.gitkeep
 
 # Test files
 test_images/
@@ -80,10 +83,12 @@ media/results/*
 !media/results/.gitkeep
 media/crops/*
 !media/crops/.gitkeep
+
 # Notebooks outputs
 *.h5
 *.ckpt
 *.tar
+notebooks/.ipynb_checkpoints
 
 # YOLO cache
 *.npy

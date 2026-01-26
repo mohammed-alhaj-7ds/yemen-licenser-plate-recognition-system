@@ -3,21 +3,21 @@ Django base settings — shared between dev and production.
 """
 from pathlib import Path
 import os
-
 import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 env = environ.Env(
     DEBUG=(bool, False),
-    ALLOWED_HOSTS=(list, []),
+    ALLOWED_HOSTS=(list, ["*"]),
     SECRET_KEY=(str, "django-insecure-dev-only-change-in-production"),
 )
 
+# Read .env if available
 environ.Env.read_env(os.path.join(BASE_DIR.parent, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
-DEBUG = env.bool("DEBUG", default=True)
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+DEBUG = env.bool("DEBUG", default=False)
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"]) # Allow all hosts for Railway/Paas
 
 INSTALLED_APPS = [
     "django.contrib.contenttypes",
@@ -30,6 +30,8 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", # Added WhiteNoise
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "api.middleware.RateLimitMiddleware",
@@ -38,7 +40,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
-TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [], "APP_DIRS": True}]
+TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [os.path.join(BASE_DIR.parent, 'frontend', 'dist')], "APP_DIRS": True}] # Add frontend/dist to templates
 WSGI_APPLICATION = "core.wsgi.application"
 
 _db_name = env("DB_PATH", default=str(BASE_DIR / "db.sqlite3"))
@@ -50,17 +52,30 @@ USE_I18N = True
 USE_TZ = True
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# Static & media
+# Static & Media
 STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / "staticfiles"
-STATICFILES_DIRS = [BASE_DIR.parent / "static"] if (BASE_DIR.parent / "static").is_dir() else []
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+# Add frontend build assets to staticfiles dirs
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR.parent, "static"),
+    os.path.join(BASE_DIR.parent, "frontend", "dist", "assets"), 
+] if os.path.isdir(os.path.join(BASE_DIR.parent, "frontend", "dist", "assets")) else []
 
+# Whitenoise Storage
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+
+# Media
 MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR.parent / "media"
+MEDIA_ROOT = os.path.join(BASE_DIR.parent, "media")
 
 # Security
 SECURE_BROWSER_XSS_FILTER = True
 SECURE_CONTENT_TYPE_NOSNIFF = True
+# For production (Railway handles HTTPS termination, but Django should know)
+if not DEBUG:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 # REST Framework
 REST_FRAMEWORK = {
@@ -85,12 +100,12 @@ SPECTACULAR_SETTINGS = {
     'REDOC_DIST': 'SIDECAR',
 }
 
-# Upload limits (100MB)
+# Upload limits
 DATA_UPLOAD_MAX_MEMORY_SIZE = 104_857_600
 FILE_UPLOAD_MAX_MEMORY_SIZE = 104_857_600
 
-# CORS — base: allow all for dev; production overrides
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS
+CORS_ALLOW_ALL_ORIGINS = True # For simplicity in this setup, or restrict to frontend domain
 CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOW_HEADERS = [
     "accept", "accept-encoding", "authorization", "content-type",
@@ -98,7 +113,7 @@ CORS_ALLOW_HEADERS = [
 ]
 CORS_ALLOW_METHODS = ["DELETE", "GET", "OPTIONS", "PATCH", "POST", "PUT"]
 
-# Logging — minimal in base
+# Logging
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -108,6 +123,7 @@ LOGGING = {
     "loggers": {"django": {"handlers": ["console"], "level": "INFO", "propagate": False}},
 }
 
-# API
+# API Config
 API_RATE_LIMIT_PER_MINUTE = env.int("API_RATE_LIMIT_PER_MINUTE", default=60)
 VIDEO_PROCESS_TIMEOUT_SECONDS = env.int("VIDEO_PROCESS_TIMEOUT_SECONDS", default=600)
+FORCE_CPU = env.bool("FORCE_CPU", default=True) # Default to CPU for cheap deployment

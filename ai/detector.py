@@ -1,4 +1,5 @@
 from pathlib import Path
+import os
 
 import cv2
 from ultralytics import YOLO
@@ -10,10 +11,22 @@ _model = None
 def _resolve_model_path() -> str:
     """
     Resolve local YOLO weights path.
-    Expected layout (production): <repo_root>/ai/best.pt
+    Priority: ENV var > ai/models/plate_detect.pt > ai/best.pt > legacy paths
     """
+    # First check ENV variable
+    env_path = os.getenv("YOLO_DETECT_MODEL_PATH")
+    if env_path:
+        p = Path(env_path)
+        if not p.is_absolute():
+            # Relative to repo root
+            p = Path(__file__).resolve().parents[1] / env_path
+        if p.exists():
+            return str(p)
+    
     repo_root = Path(__file__).resolve().parents[1]  # workspace root
     candidates = [
+        Path(__file__).resolve().parent / "models" / "plate_detect.pt",
+        Path(__file__).resolve().parent / "models" / "best.pt",
         Path(__file__).resolve().parent / "best.pt",
         repo_root / "model" / "best.pt",
         repo_root / "models" / "best.pt",
@@ -22,8 +35,8 @@ def _resolve_model_path() -> str:
         if p.exists():
             return str(p)
     raise FileNotFoundError(
-        "YOLO weights not found. Expected one of: "
-        + ", ".join(str(p) for p in candidates)
+        "YOLO weights not found. Set YOLO_DETECT_MODEL_PATH or add ai/models/plate_detect.pt. "
+        + "Expected one of: " + ", ".join(str(p) for p in candidates)
     )
 
 

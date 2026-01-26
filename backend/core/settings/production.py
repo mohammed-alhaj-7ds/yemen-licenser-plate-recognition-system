@@ -4,7 +4,7 @@ Django production settings.
 from .base import *  # noqa: F401, F403
 
 DEBUG = False
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
 
 # CORS: restrict origins in production
 CORS_ALLOW_ALL_ORIGINS = False

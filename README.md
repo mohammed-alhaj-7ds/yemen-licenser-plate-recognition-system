@@ -201,25 +201,25 @@ npm run dev
 Create a `.env` file in the project root (see `.env.example`):
 
 ```ini
-DEBUG=True
-SECRET_KEY=your-secret-key
-FORCE_CPU=False  # Set to True if you don't have a CUDA GPU
-YOLO_SEG_MODEL_PATH=ai/weights/yolov8n-seg.pt
-YOLO_DETECT_MODEL_PATH=ai/weights/best.pt
+DEBUG=False
+SECRET_KEY=your-secret-key-here
+FORCE_CPU=True
+YOLO_SEG_MODEL_PATH=ai/models/vehicle_seg.pt
+YOLO_DETECT_MODEL_PATH=ai/models/plate_detect.pt
 ```
 
 ---
 
 ## 📚 API Documentation
 
-Access the interactive Swagger documentation (Redoc/Spectacular) at:
-`http://localhost:8000/api/docs/`
+Access the interactive Swagger documentation at:
+
+- Local: `http://localhost:8000/api/docs/`
+- Production: `https://your-project.railway.app/api/docs/`
 
 ---
 
 ## 🧪 Testing
-
-We utilize `pytest` for endpoint integration testing.
 
 ```bash
 cd backend
@@ -228,20 +228,57 @@ pytest
 
 ---
 
+## 🚀 Deployment (Railway)
+
+### Quick Deploy
+
+1. **Push to GitHub** (model files excluded via .gitignore)
+
+2. **Create Railway Project**
+   - Connect your GitHub repository
+   - Railway auto-detects the Procfile
+
+3. **Set Environment Variables** in Railway:
+
+   ```
+   SECRET_KEY=your-production-secret
+   DEBUG=False
+   FORCE_CPU=True
+   DJANGO_SETTINGS_MODULE=core.settings.production
+   ```
+
+4. **Upload Model Files**:
+   - Create a Railway Volume
+   - Mount at `/app/ai/models`
+   - Upload `vehicle_seg.pt` and `plate_detect.pt`
+
+5. **Deploy** - Railway builds and deploys automatically
+
+### Production URLs
+
+After deployment:
+
+- **Frontend**: `https://your-project.railway.app/`
+- **API**: `https://your-project.railway.app/api/v1/`
+- **Health**: `https://your-project.railway.app/api/v1/health/`
+- **Swagger**: `https://your-project.railway.app/api/docs/`
+
+---
+
 ## 🛡️ Production Readiness
 
-- **Security**: API Key Middleware enabled.
-- **Performance**: Singleton model loading prevents memory leaks.
-- **Scalability**: Stateless architecture allows container orchestration.
-- **UX**: Polished, responsive, and error-tolerant interface.
+- **Security**: API Key Middleware + Rate Limiting
+- **Performance**: Singleton model loading prevents memory leaks
+- **Scalability**: Stateless architecture allows container orchestration
+- **Server**: Gunicorn + WhiteNoise for production
 
 ---
 
 ## 🔮 Future Improvements
 
-1.  **Edge Deployment**: Optimization for Jetson Nano/Raspberry Pi.
-2.  **Real-Time Streaming**: RTMP/RTSP stream support for live cameras.
-3.  **Fleet Logic**: Advanced analytics for fleet management.
+1. **Edge Deployment**: Optimization for Jetson Nano/Raspberry Pi
+2. **Real-Time Streaming**: RTMP/RTSP stream support for live cameras
+3. **Fleet Logic**: Advanced analytics for fleet management
 
 ---
 

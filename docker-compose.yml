@@ -1,0 +1,45 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: yemen_lpr_backend
+    environment:
+      - DEBUG=False
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-me-in-production}
+      - ALLOWED_HOSTS=localhost,127.0.0.1,backend
+      - CORS_ALLOWED_ORIGINS=http://localhost,http://127.0.0.1,http://frontend
+      - DB_PATH=/app/backend/data/db.sqlite3
+      # Set to true to force CPU inference (disables GPU even if available)
+      - FORCE_CPU=${FORCE_CPU:-false}
+    volumes:
+      - media_data:/app/media
+      - backend_data:/app/backend/data
+      # Mount models directory for easy model updates without rebuild
+      - ./ai/models:/app/ai/models:ro
+    expose:
+      - "8000"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - VITE_API_BASE=
+    container_name: yemen_lpr_frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  media_data:
+  backend_data:

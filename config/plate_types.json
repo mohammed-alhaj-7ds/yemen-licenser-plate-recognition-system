@@ -1,0 +1,42 @@
+{
+  "plate_types": {
+    "private": {
+      "arabic_names": ["خصوصي", "خاصة", "شخصية"],
+      "english_names": ["private", "personal"],
+      "colors": ["blue", "أزرق"],
+      "color_ranges": {
+        "blue": {
+          "hsv_lower": [100, 50, 50],
+          "hsv_upper": [130, 255, 255]
+        }
+      }
+    },
+    "commercial": {
+      "arabic_names": ["نقل", "تجاري", "نقل عام"],
+      "english_names": ["commercial", "cargo", "transport"],
+      "colors": ["yellow", "أصفر"],
+      "color_ranges": {
+        "yellow": {
+          "hsv_lower": [20, 50, 50],
+          "hsv_upper": [40, 255, 255]
+        }
+      }
+    },
+    "taxi": {
+      "arabic_names": ["أجرة", "تاكسي", "出租"],
+      "english_names": ["taxi", "cab"],
+      "colors": ["white", "أبيض"],
+      "color_ranges": {
+        "white": {
+          "hsv_lower": [0, 0, 200],
+          "hsv_upper": [180, 30, 255]
+        }
+      }
+    }
+  },
+  "confidence_thresholds": {
+    "text_priority": 0.8,
+    "color_priority": 0.7,
+    "fallback_threshold": 0.5
+  }
+}

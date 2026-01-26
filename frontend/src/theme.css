@@ -1,0 +1,545 @@
+/* ==========================================================================
+   YEMEN LPR - Professional Theme
+   Vibrant Color Palette with Smooth Animations
+   ========================================================================== */
+
+:root {
+  /* -------------------------------------------------------------------------
+     Background Colors - Deep Navy
+     ------------------------------------------------------------------------- */
+  --bg: #0b1220;
+  --card: #0f1724;
+  --card-hover: #141d2e;
+  --surface: #1a2332;
+  --elevated: #1f2a3c;
+
+  /* -------------------------------------------------------------------------
+     Accent Colors - Vibrant & Professional
+     ------------------------------------------------------------------------- */
+  --accent-1: #06b6d4; /* Teal/Cyan - Primary */
+  --accent-2: #8b5cf6; /* Violet - Secondary */
+  --accent-3: #ff6b6b; /* Coral - Danger/Alert */
+  --accent-4: #f59e0b; /* Amber - Warning */
+  --accent-5: #10b981; /* Emerald - Success */
+  --accent-6: #ec4899; /* Pink - Accent */
+
+  /* Gradients */
+  --gradient-primary: linear-gradient(
+    135deg,
+    var(--accent-1) 0%,
+    var(--accent-2) 100%
+  );
+  --gradient-success: linear-gradient(
+    135deg,
+    var(--accent-5) 0%,
+    var(--accent-1) 100%
+  );
+  --gradient-warm: linear-gradient(
+    135deg,
+    var(--accent-3) 0%,
+    var(--accent-4) 100%
+  );
+  --gradient-cool: linear-gradient(
+    135deg,
+    var(--accent-2) 0%,
+    var(--accent-6) 100%
+  );
+
+  /* -------------------------------------------------------------------------
+     Text Colors
+     ------------------------------------------------------------------------- */
+  --text: #f0f6fc;
+  --text-secondary: #a8b4c4;
+  --muted: #6b7a8f;
+  --text-on-accent: #ffffff;
+
+  /* -------------------------------------------------------------------------
+     Border & Effects
+     ------------------------------------------------------------------------- */
+  --border: #2a3548;
+  --border-light: #3a4a5f;
+  --glass: rgba(255, 255, 255, 0.04);
+  --glass-border: rgba(255, 255, 255, 0.08);
+
+  /* Shadows */
+  --shadow-sm: 0 2px 8px rgba(2, 6, 23, 0.4);
+  --shadow-md: 0 6px 18px rgba(2, 6, 23, 0.55);
+  --shadow-lg: 0 12px 32px rgba(2, 6, 23, 0.65);
+  --shadow-glow-teal: 0 0 30px rgba(6, 182, 212, 0.35);
+  --shadow-glow-violet: 0 0 30px rgba(139, 92, 246, 0.35);
+  --shadow-glow-success: 0 0 30px rgba(16, 185, 129, 0.35);
+
+  /* -------------------------------------------------------------------------
+     Spacing & Shapes
+     ------------------------------------------------------------------------- */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* -------------------------------------------------------------------------
+     Animation
+     ------------------------------------------------------------------------- */
+  --transition-fast: 150ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  --transition: 250ms cubic-bezier(0.2, 0.9, 0.3, 1);
+  --transition-slow: 400ms cubic-bezier(0.2, 0.9, 0.3, 1);
+
+  /* -------------------------------------------------------------------------
+     Typography
+     ------------------------------------------------------------------------- */
+  --font-sans:
+    "Inter", "Cairo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "SF Mono", Consolas, monospace;
+}
+
+/* ==========================================================================
+   Global Animations
+   ========================================================================== */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-12px);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--accent-1);
+  }
+  50% {
+    box-shadow: 0 0 25px var(--accent-1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* ==========================================================================
+   Utility Classes
+   ========================================================================== */
+
+/* Animation Classes */
+.fade-in {
+  animation: fadeIn 360ms ease-out both;
+}
+
+.fade-in-up {
+  animation: fadeInUp 500ms ease-out both;
+}
+
+.fade-in-down {
+  animation: fadeInDown 400ms ease-out both;
+}
+
+.slide-in-left {
+  animation: slideInLeft 450ms ease-out both;
+}
+
+.slide-in-right {
+  animation: slideInRight 450ms ease-out both;
+}
+
+.scale-in {
+  animation: scaleIn 350ms ease-out both;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+/* Stagger Delays */
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
+.delay-4 {
+  animation-delay: 0.4s;
+}
+.delay-5 {
+  animation-delay: 0.5s;
+}
+
+/* Gradient Text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.gradient-text-warm {
+  background: var(--gradient-warm);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Glass Effect */
+.glass {
+  background: var(--glass);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* Hover Effects */
+.hover-lift {
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hover-glow {
+  transition: box-shadow var(--transition);
+}
+
+.hover-glow:hover {
+  box-shadow: var(--shadow-glow-teal);
+}
+
+/* Button Base */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  border-radius: var(--radius-md);
+  border: none;
+  cursor: pointer;
+  transition:
+    transform var(--transition),
+    box-shadow var(--transition),
+    background var(--transition);
+}
+
+.btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+}
+
+.btn:active:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  background: var(--gradient-primary);
+  color: var(--text-on-accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  box-shadow: var(--shadow-glow-teal);
+}
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: var(--elevated);
+  border-color: var(--accent-1);
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--glass);
+  color: var(--text);
+}
+
+/* Card Base */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  transition: all var(--transition);
+}
+
+.card:hover {
+  border-color: var(--border-light);
+  box-shadow: var(--shadow-md);
+}
+
+.card-interactive:hover {
+  transform: translateY(-4px);
+  border-color: var(--accent-1);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Loading Skeleton */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--surface) 25%,
+    var(--elevated) 50%,
+    var(--surface) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-text {
+  height: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.skeleton-title {
+  height: 1.5rem;
+  width: 60%;
+  margin-bottom: 1rem;
+}
+
+.skeleton-image {
+  height: 200px;
+  width: 100%;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  border-radius: var(--radius-full);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-teal {
+  background: rgba(6, 182, 212, 0.15);
+  color: var(--accent-1);
+}
+
+.badge-violet {
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent-2);
+}
+
+.badge-success {
+  background: rgba(16, 185, 129, 0.15);
+  color: var(--accent-5);
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.15);
+  color: var(--accent-4);
+}
+
+.badge-danger {
+  background: rgba(255, 107, 107, 0.15);
+  color: var(--accent-3);
+}
+
+/* Tooltips */
+.tooltip {
+  position: relative;
+}
+
+.tooltip::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-4px);
+  padding: 0.5rem 0.75rem;
+  background: var(--elevated);
+  color: var(--text);
+  font-size: 0.75rem;
+  border-radius: var(--radius-sm);
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+.tooltip:hover::after {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-8px);
+}
+
+/* Copy Button Flash */
+.copy-flash {
+  animation: copyFlash 300ms ease-out;
+}
+
+@keyframes copyFlash {
+  0% {
+    background: var(--accent-5);
+    color: white;
+  }
+  100% {
+    background: transparent;
+  }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-light);
+}
+
+/* Focus States */
+*:focus-visible {
+  outline: 2px solid var(--accent-1);
+  outline-offset: 2px;
+}
+
+/* Selection */
+::selection {
+  background: var(--accent-1);
+  color: white;
+}

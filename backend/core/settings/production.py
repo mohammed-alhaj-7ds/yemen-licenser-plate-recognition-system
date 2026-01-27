@@ -2,6 +2,7 @@
 Django production settings.
 """
 from .base import *  # noqa: F401, F403
+print("DEBUG: Loading production.py settings...")
 
 DEBUG = False
 ALLOWED_HOSTS = ["*"]

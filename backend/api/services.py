@@ -20,9 +20,11 @@ class PlateRecognitionService:
     """Service for handling plate recognition operations"""
     
     def __init__(self):
-        self.upload_dir = settings.MEDIA_ROOT / 'uploads'
-        self.results_dir = settings.MEDIA_ROOT / 'results'
-        self.videos_dir = settings.MEDIA_ROOT / 'results'
+        from pathlib import Path
+        media_root = Path(settings.MEDIA_ROOT)
+        self.upload_dir = media_root / 'uploads'
+        self.results_dir = media_root / 'results'
+        self.videos_dir = media_root / 'results'
         
         # Create directories if they don't exist
         for dir_path in [self.upload_dir, self.results_dir, self.videos_dir]:

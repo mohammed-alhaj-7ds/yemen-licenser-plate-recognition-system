@@ -4,13 +4,13 @@ Django production settings.
 from .base import *  # noqa: F401, F403
 
 DEBUG = False
-ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["*"])
+ALLOWED_HOSTS = ["*"]
 
 # CORS: restrict origins in production
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
-    default=["http://localhost", "http://127.0.0.1", "https://localhost", "https://127.0.0.1"],
+    default=["https://*.railway.app"],
 )
 CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 

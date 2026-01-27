@@ -56,10 +56,12 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 # Add frontend build assets to staticfiles dirs
+# Add frontend build assets to staticfiles dirs
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR.parent, "static"),
-    os.path.join(BASE_DIR.parent, "frontend", "dist", "assets"), 
-] if os.path.isdir(os.path.join(BASE_DIR.parent, "frontend", "dist", "assets")) else []
+    # In Docker, we copy frontend/dist to backend/staticfiles/
+    os.path.join(BASE_DIR, "staticfiles"),
+]
 
 # Whitenoise Storage
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"

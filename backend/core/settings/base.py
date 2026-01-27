@@ -34,9 +34,9 @@ MIDDLEWARE = [
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
-    "api.middleware.RateLimitMiddleware",
-    "api.middleware.APIKeyMiddleware",
-    "api.middleware.SecurityHeadersMiddleware",
+    # "api.middleware.RateLimitMiddleware", # Removed: Implementation missing
+    # "api.middleware.APIKeyMiddleware",    # Removed: Implementation missing
+    # "api.middleware.SecurityHeadersMiddleware", # Removed: Implementation missing
     "api.middleware.SafeExceptionMiddleware",  # Catches crash bugs
 ]
 

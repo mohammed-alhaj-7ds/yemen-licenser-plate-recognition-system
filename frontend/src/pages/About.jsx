@@ -99,7 +99,7 @@ function About() {
             <div className="tech-grid">
               <div className="tech-item">
                 <div className="tech-icon">🐍</div>
-                <h3>Python & Deep Learning</h3>
+                <h3>Python & Deep Learning & Computer vision</h3>
                 <p>PyTorch, Ultralytics YOLOv8, OpenCV, NumPy</p>
               </div>
               <div className="tech-item">
@@ -161,6 +161,13 @@ function About() {
                 <div className="team-avatar">👨‍💻</div>
                 <div className="team-name">Ali Al-Nusairi</div>
                 <div className="team-role">ML Engineer</div>
+              </div>
+              <div className="team-member">
+                <div className="team-avatar">👨‍💻</div>
+                <div className="team-name">Al-Ezz Al-Mahjary</div>
+                <div className="team-role">
+                  Team Lead & Full Stack & ML Engineer
+                </div>
               </div>
             </div>
           </div>

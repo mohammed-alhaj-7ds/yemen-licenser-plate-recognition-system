@@ -31,12 +31,13 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware", # Added WhiteNoise
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "api.middleware.RateLimitMiddleware",
     "api.middleware.APIKeyMiddleware",
     "api.middleware.SecurityHeadersMiddleware",
+    "api.middleware.SafeExceptionMiddleware",  # Catches crash bugs
 ]
 
 ROOT_URLCONF = "core.urls"

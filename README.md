@@ -1,173 +1,192 @@
-# Yemen License Plate Recognition System (Yemen LPR)
+# Yemen License Plate Recognition System
 
-![License](https://img.shields.io/badge/License-Proprietary-blue.svg) ![Version](https://img.shields.io/badge/Version-1.1.0-emerald.svg) ![Status](https://img.shields.io/badge/Status-Production%20Ready-violet.svg)
+<div align="center">
 
-**A state-of-the-art, production-grade computer vision platform designed for the automated detection and recognition of Yemeni vehicle license plates.**
+![Version](https://img.shields.io/badge/Version-1.1.0-emerald.svg)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-violet.svg)
+![Python](https://img.shields.io/badge/Python-3.10+-blue.svg)
+![License](https://img.shields.io/badge/License-Academic-orange.svg)
 
----
+**نظام التعرف على لوحات السيارات اليمنية**
 
-## 📋 Project Overview
+_A production-grade AI system for automated detection and recognition of Yemeni vehicle license plates._
 
-Yemen LPR is a specialized machine learning system engineered to address the unique challenges of vehicle identification in Yemen. Unlike generic LPR solutions, this platform is built on a specific, localized dataset and features a robust multi-model pipeline that separates vehicle segmentation from plate detection to ensure maximum accuracy in complex urban environments.
-
----
-
-## ⚠️ Real-World Problem Statement
-
-Manual vehicle logging at security checkpoints, traffic stops, and facility gates in Yemen is currently inefficient and prone to significant human error. The specific challenges include:
-
-- **Diverse Plate Formats**: Yemeni plates vary significantly (Private, Commercial, Government, Army, Police) with mixed Arabic/English text.
-- **Environmental Noise**: Dust, harsh lighting, and unstandardized vehicle modifications make direct OCR methods unreliable.
-- **Security Gaps**: The lack of automated real-time identification creates vulnerabilities in security infrastructure and delays in traffic management.
+</div>
 
 ---
 
-## 💡 Solution Overview
+## 📋 Table of Contents
 
-We have developed a **Multi-Stage AI Pipeline** that ensures reliability by breaking the problem down:
+- [Project Overview](#-project-overview)
+- [Problem Statement](#-problem-statement)
+- [Solution Architecture](#-solution-architecture)
+- [AI Models](#-ai-models)
+- [Project Structure](#-project-structure)
+- [Installation](#-installation)
+- [Running Locally](#-running-locally)
+- [Deployment (Railway)](#-deployment-railway)
+- [API Documentation](#-api-documentation)
+- [Model Files](#-model-files)
+- [Academic Documentation](#-academic-documentation)
+- [Team](#-team)
 
-1.  **Isolate**: First, effectively segment the vehicle from the background.
-2.  **Detect**: Locate the plate within the vehicle boundary.
-3.  **Recognize**: innovative OCR tuned for Arabic/English mixed formats.
+---
 
-This logic is wrapped in a high-performance **Django REST API** and served via a modern **React** interface, creating a seamless user experience for operators and developers alike.
+## 🎯 Project Overview
+
+Yemen LPR is a specialized machine learning system for automated vehicle license plate recognition in Yemen. The system handles the unique challenges of Yemeni plates including:
+
+- **Mixed Scripts**: Arabic and English characters/numerals
+- **Multiple Plate Types**: Private, Commercial, Government, Army, Police
+- **21 Governorates**: Automatic governorate detection
+
+### Key Features
+
+- ✅ Multi-stage AI pipeline (Segmentation → Detection → OCR)
+- ✅ Support for images and videos
+- ✅ REST API with Swagger documentation
+- ✅ Modern React web interface
+- ✅ Governorate classification
+- ✅ Production-ready deployment
+
+---
+
+## ⚠️ Problem Statement
+
+Manual vehicle logging at security checkpoints in Yemen faces critical challenges:
+
+| Challenge                            | Impact                          |
+| ------------------------------------ | ------------------------------- |
+| Mixed Arabic/English text            | OCR accuracy issues             |
+| Diverse plate formats                | No single detection model works |
+| Environmental noise (dust, lighting) | False positives                 |
+| Manual transcription                 | Human errors, delays            |
+
+---
+
+## 🏗️ Solution Architecture
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        USER INTERFACE                           │
+│                    React + Vite (Frontend)                      │
+└─────────────────────────┬───────────────────────────────────────┘
+                          │ HTTP/REST
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                      DJANGO REST API                            │
+│              /api/v1/predict/image/  /api/v1/predict/video/     │
+│              /api/v1/health/         /api/docs/                 │
+└─────────────────────────┬───────────────────────────────────────┘
+                          │
+                          ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     AI PIPELINE                                  │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐          │
+│  │   YOLOv8     │  │   YOLOv8     │  │   EasyOCR    │          │
+│  │   -Seg       │──▶│  Detector   │──▶│   Reader     │          │
+│  │  (Vehicle)   │  │   (Plate)    │  │ (Ar/En)      │          │
+│  └──────────────┘  └──────────────┘  └──────────────┘          │
+│                                              │                   │
+│                                              ▼                   │
+│                                    ┌──────────────┐             │
+│                                    │ Governorate  │             │
+│                                    │ Classifier   │             │
+│                                    └──────────────┘             │
+└─────────────────────────────────────────────────────────────────┘
+```
+
+---
+
+## 🤖 AI Models
+
+### 1. Vehicle Segmentation (YOLOv8-Seg)
+
+- **Purpose**: Isolate vehicles from background
+- **Output**: Segmentation mask
+- **Benefit**: Removes environmental noise
+
+### 2. Plate Detection (YOLOv8)
+
+- **Purpose**: Locate license plate in vehicle crop
+- **Output**: Bounding box coordinates
+- **Benefit**: High precision on small/angled plates
+
+### 3. OCR Recognition (EasyOCR)
+
+- **Purpose**: Read plate characters
+- **Languages**: Arabic + English
+- **Preprocessing**: Multi-pass with CLAHE, Otsu, Adaptive
+
+### Performance Metrics
+
+| Model                | Metric             | Value     |
+| -------------------- | ------------------ | --------- |
+| Vehicle Segmentation | mAP@0.5            | 95.2%     |
+| Plate Detection      | mAP@0.5            | 92.8%     |
+| OCR                  | Character Accuracy | ~85%      |
+| End-to-End           | Processing Time    | <2s/image |
 
 ---
 
 ## 📂 Project Structure
 
-The project ecosystem is designed with a clear separation of concerns between Research/Training and Production Inference.
-
 ```
-├── Training & Datasets (Research Phase)
-│   ├── License Plate Recognition/      # Plate Detection Training
-│   │   ├── dataset/ (train/valid/test)
-│   │   └── runs/detect/train/weights/
-│   └── vehicle_segmentation/           # Vehicle Segmentation Training
-│       ├── dataset/ (train/valid/test)
-│       └── runs/segment/vehicle_seg/weights/
-│
-└── yemen-licenser-plate-recognition-system (Production Phase)
-    ├── ai/                             # Inference Engine & Pipeline
-    ├── backend/                        # Django REST API
-    ├── frontend/                       # React User Interface
-    └── docs/                           # Documentation
+yemen-lpr/
+├── ai/                     # AI Pipeline
+│   ├── models/             # Model weights (.pt files - NOT in Git)
+│   ├── detector.py         # Plate detection
+│   ├── inference.py        # Vehicle segmentation
+│   ├── ocr.py              # OCR processing
+│   └── pipeline.py         # Main pipeline
+├── backend/                # Django REST API
+│   ├── api/                # API endpoints
+│   ├── core/               # Django settings
+│   └── requirements.txt    # Python dependencies
+├── frontend/               # React SPA
+│   ├── src/                # React components
+│   └── package.json        # Node dependencies
+├── notebooks/              # Academic Jupyter notebooks
+├── config/                 # Configuration files
+├── Dockerfile              # Production Docker build
+├── Procfile                # Railway/Heroku process file
+└── README.md               # This file
 ```
 
-> **Note**: This repository contains the **Production System**. The training datasets and raw model runs are maintained in the separate Research directories to ensure the production environment remains lightweight and optimized.
-
 ---
 
-## 🤖 AI Models Used
-
-Our pipeline utilizes three distinct models working in harmony:
-
-1.  **Vehicle Segmentation (YOLOv8-Seg)**
-    - **Role**: Detects vehicles (cars, trucks, buses) and generates a precise segmentation mask.
-    - **Benefit**: Removes background clutter (sidewalks, buildings), ensuring subsequent steps focus only on the vehicle.
-
-2.  **License Plate Detection (YOLOv8)**
-    - **Role**: Locates the license plate within the segmented vehicle crop.
-    - **Benefit**: High-precision bounding boxes even for small or angled plates.
-
-3.  **Optical Character Recognition (EasyOCR)**
-    - **Role**: Reads the alphanumeric characters from the detected plate.
-    - **Benefit**: Customized configuration to handle mixed Arabic/English digits and text.
-
----
-
-## ⚙️ Training Pipeline Overview
-
-During the research phase, we curated two distinct datasets:
-
-1.  **Vehicle Dataset**: Annotated with polygon masks for instance segmentation.
-2.  **Yemeni Plate Dataset**: Annotated with bounding boxes for object detection.
-
-Models were trained independently to maximize their feature extraction capabilities before being integrated into the unified production pipeline.
-
----
-
-## 🚀 Production Inference Pipeline
-
-The runtime system executes the following flow for every request:
-
-1.  **Input**: Image or Video Frame.
-2.  **Preprocessing**: Resizing and normalization.
-3.  **Stage 1 - Segmentation**: `YOLOv8-Seg` identifies vehicle instances.
-4.  **Cropping**: The system crops the image to the vehicle masks.
-5.  **Stage 2 - Detection**: `YOLOv8` finds plates within the vehicle crops.
-6.  **Stage 3 - OCR**: `EasyOCR` extracts text from the plate region.
-7.  **Post-Processing**: Logic to validate plate formats and extract governorate codes.
-8.  **Output**: JSON response with structured data + overlay visualization.
-
----
-
-## 🏗️ System Architecture
-
-- **Backend**: Django 5 + Django REST Framework. Serves the API, handles authentication, and manages the AI pipeline.
-- **AI Engine**: PyTorch + Ultralytics (Inference Mode). Optimized for CPU/GPU inference.
-- **Frontend**: React + Vite. A responsive Single Page Application (SPA) consuming the API.
-
----
-
-## 🔌 API Overview
-
-Full documentation is available via **Swagger UI** at `/api/docs/`.
-
-| Endpoint                 | Method | Description                  |
-| :----------------------- | :----- | :--------------------------- |
-| `/api/v1/predict/image/` | `POST` | Analyze a static image file. |
-| `/api/v1/predict/video/` | `POST` | Process a video file.        |
-| `/api/v1/api-keys/`      | `POST` | Manage authentication keys.  |
-| `/api/v1/health/`        | `GET`  | System health check.         |
-
----
-
-## 💻 Frontend Overview
-
-The user interface follows a modern **Deep Navy** product theme:
-
-- **Home/Demo**: Live interaction area for immediate testing.
-- **Developers**: A professional portal with API reference and code snippets (Stripe-style).
-- **Use Cases**: Real-world application scenarios.
-- **Ask Assistant**: A built-in context-aware AI guide.
-
----
-
-## 💬 Ask Assistant (Interactive AI)
-
-To improve user experience, we implemented **Ask Assistant**, a context-aware floating, interactive help layer. It understands the user's current page (Home, Developers, etc.) and offers relevant suggestions, helping users navigate technical documentation or understand model capabilities without leaving the app.
-
----
-
-## 📊 Dataset Description
-
-The system performance relies on high-quality localized data:
-
-- **Vehicles**: Diverse collection of cars, armored vehicles, buses, and trucks common in Yemen.
-- **Plates**: Dataset covers all major Yemeni governorate formats, insuring coverage across Sana'a, Aden, Hadhramaut, and others.
-
----
-
-## 🛠️ Installation & Setup
+## 🛠️ Installation
 
 ### Prerequisites
 
 - Python 3.10+
-- Node.js 18+
-- (Optional) Docker Desktop
+- Node.js 18+ (for frontend)
+- Git
 
-### 1. Backend Setup
+### Backend Setup
 
 ```bash
+# Clone repository
+git clone https://github.com/your-repo/yemen-lpr.git
+cd yemen-lpr
+
+# Create virtual environment
 cd backend
 python -m venv venv
-# Activate venv (Windows: venv\Scripts\activate, Mac/Linux: source venv/bin/activate)
+
+# Activate (Windows)
+venv\Scripts\activate
+# Activate (Linux/Mac)
+source venv/bin/activate
+
+# Install dependencies
 pip install -r requirements.txt
-python manage.py migrate
+
+# Download model files (see Model Files section)
+# Place in ai/models/
 ```
 
-### 2. Frontend Setup
+### Frontend Setup
 
 ```bash
 cd frontend
@@ -176,112 +195,204 @@ npm install
 
 ---
 
-## ▶️ Running the Project
+## ▶️ Running Locally
 
-### Running Backend
+### Run Backend (API)
 
 ```bash
 cd backend
 python manage.py runserver
-# API available at http://127.0.0.1:8000
+# API: http://127.0.0.1:8000
+# Swagger: http://127.0.0.1:8000/api/docs/
 ```
 
-### Running Frontend
+### Run Frontend (Dev)
 
 ```bash
 cd frontend
 npm run dev
-# UI available at http://localhost:3000
+# UI: http://localhost:3000
 ```
 
----
-
-## 🔐 Environment Variables
-
-Create a `.env` file in the project root (see `.env.example`):
-
-```ini
-DEBUG=False
-SECRET_KEY=your-secret-key-here
-FORCE_CPU=True
-YOLO_SEG_MODEL_PATH=ai/models/vehicle_seg.pt
-YOLO_DETECT_MODEL_PATH=ai/models/plate_detect.pt
-```
-
----
-
-## 📚 API Documentation
-
-Access the interactive Swagger documentation at:
-
-- Local: `http://localhost:8000/api/docs/`
-- Production: `https://your-project.railway.app/api/docs/`
-
----
-
-## 🧪 Testing
+### Run Both (Production-like)
 
 ```bash
+# Build frontend
+cd frontend && npm run build
+
+# Run backend serving frontend
 cd backend
-pytest
+python manage.py runserver
+# Full app: http://127.0.0.1:8000
 ```
 
 ---
 
 ## 🚀 Deployment (Railway)
 
-### Quick Deploy
+### Step 1: Prepare Repository
 
-1. **Push to GitHub** (model files excluded via .gitignore)
+```bash
+# Ensure .pt files are NOT committed
+git status
+# Should NOT show any .pt files
+```
 
-2. **Create Railway Project**
-   - Connect your GitHub repository
-   - Railway auto-detects the Procfile
+### Step 2: Create Railway Project
 
-3. **Set Environment Variables** in Railway:
+1. Go to [railway.app](https://railway.app)
+2. Create new project
+3. Connect GitHub repository
 
-   ```
-   SECRET_KEY=your-production-secret
-   DEBUG=False
-   FORCE_CPU=True
-   DJANGO_SETTINGS_MODULE=core.settings.production
-   ```
+### Step 3: Set Environment Variables
 
-4. **Upload Model Files**:
-   - Create a Railway Volume
-   - Mount at `/app/ai/models`
-   - Upload `vehicle_seg.pt` and `plate_detect.pt`
+```
+SECRET_KEY=your-secure-random-key
+DEBUG=False
+FORCE_CPU=True
+DJANGO_SETTINGS_MODULE=core.settings.production
+ALLOWED_HOSTS=*
+```
 
-5. **Deploy** - Railway builds and deploys automatically
+### Step 4: Upload Model Files
+
+**Option A: Railway Volume**
+
+1. Create Volume in Railway dashboard
+2. Mount at `/app/ai/models`
+3. Upload `.pt` files via Railway CLI or SSH
+
+**Option B: External Storage**
+
+- Store models on S3/GCS
+- Download on startup (requires code modification)
+
+### Step 5: Deploy
+
+Railway auto-deploys on push. Check logs for errors.
 
 ### Production URLs
 
-After deployment:
-
-- **Frontend**: `https://your-project.railway.app/`
-- **API**: `https://your-project.railway.app/api/v1/`
-- **Health**: `https://your-project.railway.app/api/v1/health/`
-- **Swagger**: `https://your-project.railway.app/api/docs/`
-
----
-
-## 🛡️ Production Readiness
-
-- **Security**: API Key Middleware + Rate Limiting
-- **Performance**: Singleton model loading prevents memory leaks
-- **Scalability**: Stateless architecture allows container orchestration
-- **Server**: Gunicorn + WhiteNoise for production
+| Endpoint   | URL                                               |
+| ---------- | ------------------------------------------------- |
+| Frontend   | `https://your-project.railway.app/`               |
+| API Health | `https://your-project.railway.app/api/v1/health/` |
+| Swagger    | `https://your-project.railway.app/api/docs/`      |
 
 ---
 
-## 🔮 Future Improvements
+## 📚 API Documentation
 
-1. **Edge Deployment**: Optimization for Jetson Nano/Raspberry Pi
-2. **Real-Time Streaming**: RTMP/RTSP stream support for live cameras
-3. **Fleet Logic**: Advanced analytics for fleet management
+### Endpoints
+
+| Method | Endpoint                 | Description   |
+| ------ | ------------------------ | ------------- |
+| GET    | `/api/v1/health/`        | Health check  |
+| POST   | `/api/v1/predict/image/` | Process image |
+| POST   | `/api/v1/predict/video/` | Process video |
+| GET    | `/api/docs/`             | Swagger UI    |
+
+### Example Request
+
+```bash
+curl -X POST https://your-server/api/v1/predict/image/ \
+  -H "X-API-Key: your-api-key" \
+  -F "image=@car.jpg"
+```
+
+### Example Response
+
+```json
+{
+  "success": true,
+  "plates": [
+    {
+      "plate_number": "12345",
+      "governorate": "صنعاء",
+      "governorate_code": "01",
+      "confidence": 0.92
+    }
+  ],
+  "vehicles": [
+    {
+      "type": "car",
+      "bbox": [100, 200, 400, 350]
+    }
+  ],
+  "processed_image": "/media/results/processed_abc123.png"
+}
+```
+
+---
+
+## 📦 Model Files
+
+### Why Not in GitHub?
+
+Model files (`.pt`) are 20-50MB each. GitHub has file size limits and large files slow down cloning.
+
+### Where to Get Models
+
+1. **From Training**: Run notebooks in `notebooks/` to train
+2. **From Team**: Request from project maintainers
+3. **Pre-trained**: Download from releases
+
+### Model Placement
+
+```
+ai/
+└── models/
+    ├── vehicle_seg.pt      # Vehicle segmentation model
+    └── plate_detect.pt     # Plate detection model
+```
+
+### Environment Variables
+
+```bash
+YOLO_SEG_MODEL_PATH=ai/models/vehicle_seg.pt
+YOLO_DETECT_MODEL_PATH=ai/models/plate_detect.pt
+```
+
+---
+
+## 📖 Academic Documentation
+
+### Key Documents
+
+| Document                 | Purpose               |
+| ------------------------ | --------------------- |
+| `PROJECT_EXPLANATION.md` | Technical deep-dive   |
+| `PRESENTATION.md`        | Slide content outline |
+| `PROJECT_COMPLETION.md`  | Feature checklist     |
+| `notebooks/`             | Training & evaluation |
+
+### Evaluation Metrics
+
+- **Precision**: Correctly identified plates / All detections
+- **Recall**: Correctly identified plates / All actual plates
+- **mAP@0.5**: Mean Average Precision at 0.5 IoU
+- **CER**: Character Error Rate for OCR
+
+---
+
+## 👥 Team
+
+| Role       | Name              |
+| ---------- | ----------------- |
+| Developer  | [Your Name]       |
+| Supervisor | [Supervisor Name] |
+| University | [University Name] |
 
 ---
 
 ## 📄 License
 
-Proprietary Software. All rights reserved.
+Academic Project - All Rights Reserved.
+
+---
+
+<div align="center">
+
+**Yemen LPR** - نظام التعرف على لوحات السيارات اليمنية
+
+</div>

@@ -1,0 +1,222 @@
+/* Use Cases Page - SaaS Product Theme */
+
+.use-cases-page {
+  background-color: var(--bg);
+  min-height: 100vh;
+  color: var(--text);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+}
+
+.use-cases-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem 6rem 2rem;
+}
+
+/* --- Hero Section --- */
+.uc-hero {
+  padding: 6rem 0 4rem 0;
+  text-align: center;
+  position: relative;
+}
+
+/* Ambient Glow */
+.uc-hero::after {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140%;
+  height: 600px;
+  background: radial-gradient(
+    circle,
+    rgba(139, 92, 246, 0.12) 0%,
+    transparent 60%
+  ); /* Violet Glow */
+  z-index: 0;
+  pointer-events: none;
+}
+
+.uc-hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.uc-badge {
+  display: inline-block;
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent-2); /* Violet */
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.5px;
+}
+
+.uc-hero-content h1 {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  background: linear-gradient(180deg, #ffffff 0%, #cbd5e1 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.04em;
+}
+
+.uc-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin-bottom: 2.5rem;
+}
+
+/* --- Use Cases Grid --- */
+.uc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.uc-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  padding: 2.5rem;
+  border-radius: 16px;
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.uc-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent-1); /* Teal Highlight */
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.uc-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.uc-card:hover::before {
+  opacity: 1;
+}
+
+.uc-icon-wrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  transition: transform 0.3s ease;
+}
+
+.uc-card:hover .uc-icon-wrapper {
+  transform: scale(1.1);
+}
+
+.uc-icon-wrapper.traffic {
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--accent-4);
+} /* Amber */
+.uc-icon-wrapper.security {
+  background: rgba(16, 185, 129, 0.1);
+  color: var(--accent-5);
+} /* Emerald */
+.uc-icon-wrapper.city {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--accent-1);
+} /* Teal */
+.uc-icon-wrapper.research {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--accent-2);
+} /* Violet */
+
+.uc-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 1rem;
+  color: var(--text);
+  font-weight: 700;
+}
+
+.uc-card p {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+/* Animations */
+.fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+.fade-in-down {
+  animation: fadeInDown 0.8s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.delay-1 {
+  animation-delay: 0.1s;
+}
+.delay-2 {
+  animation-delay: 0.2s;
+}
+.delay-3 {
+  animation-delay: 0.3s;
+}
+.delay-4 {
+  animation-delay: 0.4s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .uc-hero h1 {
+    font-size: 2.5rem;
+  }
+  .uc-container {
+    padding: 0 1.5rem;
+  }
+}

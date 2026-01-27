@@ -14,7 +14,13 @@ CORS_ALLOWED_ORIGINS = env.list(
     default=["https://*.railway.app"],
 )
 # Allow Railway domains for CSRF (POST requests)
+# Allow Railway domains for CSRF (POST requests)
 CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
+env_trusted_origins = env.list("CSRF_TRUSTED_ORIGINS", default=[])
+CSRF_TRUSTED_ORIGINS.extend(env_trusted_origins)
+
+# Ensure SECURE_PROXY_SSL_HEADER is set for Railway
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Logging: disable verbose/unnecessary logs
 LOGGING = {

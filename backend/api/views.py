@@ -42,6 +42,20 @@ def health_check(request):
 def predict_image(request):
     """
 
+    # Lazy import to prevent startup bottlenecks
+    from .services import PlateRecognitionService
+    plate_service = PlateRecognitionService()
+
+    uploaded_file = request.FILES["file"]
+    
+    # Validate uploaded file (check extension/content)
+    err, sc = validate_image_upload(uploaded_file)
+    if err:
+         body, _ = formatter.error(err["error"], err.get("message", ""), sc)
+         return Response(body, status=sc)
+
+    overlay = request.data.get("overlay", "true").lower() == "true"
+
     try:
         response_data = plate_service.process_image_file(
             uploaded_file,

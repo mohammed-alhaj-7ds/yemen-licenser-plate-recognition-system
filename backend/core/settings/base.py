@@ -40,7 +40,16 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "core.urls"
-TEMPLATES = [{"BACKEND": "django.template.backends.django.DjangoTemplates", "DIRS": [os.path.join(BASE_DIR.parent, 'frontend', 'dist')], "APP_DIRS": True}] # Add frontend/dist to templates
+TEMPLATES = [
+    {
+        "BACKEND": "django.template.backends.django.DjangoTemplates",
+        "DIRS": [
+            os.path.join(BASE_DIR, "templates"),  # Docker production path
+            os.path.join(BASE_DIR.parent, 'frontend', 'dist'),  # Local dev path
+        ],
+        "APP_DIRS": True,
+    }
+]
 WSGI_APPLICATION = "core.wsgi.application"
 
 _db_name = env("DB_PATH", default=str(BASE_DIR / "db.sqlite3"))
@@ -55,12 +64,11 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # Static & Media
 STATIC_URL = "/static/"
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
-# Add frontend build assets to staticfiles dirs
+
 # Add frontend build assets to staticfiles dirs
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR.parent, "static"),
-    # In Docker, we copy frontend/dist to backend/staticfiles/
-    os.path.join(BASE_DIR, "staticfiles"),
+    os.path.join(BASE_DIR, "static"),  # Docker copies assets here
 ]
 
 # Whitenoise Storage

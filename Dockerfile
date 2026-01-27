@@ -26,11 +26,15 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-# Install minimal system dependencies (libgl1 for OpenCV stability)
-# Using --no-install-recommends to keep image small
+# Install system dependencies
+# ✅ libgl1/libglib2.0-0 for OpenCV
+# ✅ ffmpeg for Video processing
+# ✅ build-essential for compiling heavier pip packages if needed
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libgl1 \
     libglib2.0-0 \
+    ffmpeg \
+    build-essential \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy requirements first
@@ -44,25 +48,33 @@ COPY backend/ ./backend/
 COPY ai/ ./ai/
 COPY config/ ./config/
 
-# Copy built frontend from Stage 1
-COPY --from=frontend-builder /app/frontend/dist /app/backend/staticfiles/
-COPY --from=frontend-builder /app/frontend/dist /app/backend/templates/
-
 # Create necessary directories
 RUN mkdir -p ai/models media/uploads media/results media/crops static
+
+# Copy built frontend Assets to Django Static folder
+# Files in /assets/ go to /app/backend/static/assets/
+COPY --from=frontend-builder /app/frontend/dist/assets /app/backend/static/assets/
+# Copy favicon and other root static files (excluding index.html)
+COPY --from=frontend-builder /app/frontend/dist/*.svg /app/backend/static/ 2>/dev/null || true
+COPY --from=frontend-builder /app/frontend/dist/*.png /app/backend/static/ 2>/dev/null || true
+COPY --from=frontend-builder /app/frontend/dist/*.ico /app/backend/static/ 2>/dev/null || true
+
+# Copy index.html to Templates folder for Django to serve
+COPY --from=frontend-builder /app/frontend/dist/index.html /app/backend/templates/index.html
 
 # Set working directory to backend
 WORKDIR /app/backend
 
 # Collect static files
-RUN python manage.py collectstatic --noinput --clear 2>/dev/null || true
+# This gathers everything from STATICFILES_DIRS (backend/static) to STATIC_ROOT
+RUN python manage.py collectstatic --noinput --clear
 
-# Expose port (Documentation only, Railway overrides this)
+# Expose port
 EXPOSE 8000
 
-# Health check (Pure Python, fast, no AI loading)
+# Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=5s --retries=3 \
     CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8000'); urllib.request.urlopen(f'http://0.0.0.0:{port}/api/v1/health/')" || exit 1
 
-# Run with gunicorn using the PORT environment variable strictly
-CMD ["sh", "-c", "gunicorn core.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 4 --timeout 300 --access-logfile - --error-logfile -"]
+# Run with gunicorn
+CMD ["sh", "-c", "gunicorn core.wsgi:application --bind 0.0.0.0:${PORT:-8000} --workers 2 --threads 4 --worker-class gthread --timeout 300 --access-logfile - --error-logfile -"]

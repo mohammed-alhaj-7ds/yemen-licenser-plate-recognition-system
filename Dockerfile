@@ -62,8 +62,10 @@ COPY ai/ ./ai/
 COPY --from=frontend-builder /app/frontend/dist/ ./backend/static/
 COPY --from=frontend-builder /app/frontend/dist/index.html ./backend/templates/index.html
 
-# Copy AI Models if they exist locally (for convenience, though volume preferred)
-COPY ai/models/ ./ai/models/ 2>/dev/null || true
+# Copy AI Models directory structure
+# Note: Large .pt files should be mounted via volume in production
+# Creating directory to ensure it exists
+RUN mkdir -p ai/models
 
 WORKDIR /app/backend
 

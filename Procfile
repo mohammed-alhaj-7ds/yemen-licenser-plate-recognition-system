@@ -1,1 +1,1 @@
-web: cd backend && python manage.py collectstatic --noinput && gunicorn core.wsgi:application --bind 0.0.0.0:$PORT --workers 2 --threads 4 --worker-class gthread --timeout 300 --access-logfile - --error-logfile -
+web: gunicorn core.wsgi:application -b 0.0.0.0:$PORT --workers 3 --timeout 300

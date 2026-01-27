@@ -7,7 +7,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-from api.views import health_check
+from api.health import health_check
 
 urlpatterns = [
     # API endpoints

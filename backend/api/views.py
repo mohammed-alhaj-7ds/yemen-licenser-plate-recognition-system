@@ -9,7 +9,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 
-from .services import ResponseFormatter
+from .utils import ResponseFormatter
 from .models import APIKey
 from .upload_validation import validate_image_upload, validate_video_upload
 import secrets

@@ -35,7 +35,19 @@ LOGGING = {
     },
 }
 
+# Production Middleware (Cleaned)
+MIDDLEWARE = [
+    "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
+    "django.middleware.common.CommonMiddleware",
+    "api.middleware.SafeExceptionMiddleware",
+]
+
 # Security headers (applied via middleware or Nginx)
 SECURE_X_FRAME_OPTIONS = "DENY"
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
+
+# Static files safety (Prevent crash if manifest missing)
+WHITENOISE_MANIFEST_STRICT = False
+WHITENOISE_USE_FINDERS = True

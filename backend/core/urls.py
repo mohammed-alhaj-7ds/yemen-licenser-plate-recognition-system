@@ -10,15 +10,16 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from api.health import health_check
 
 urlpatterns = [
+    # Health check (TOP PRIORITY)
+    path('api/health/', health_check, name='health_check_main'),
+    path('api/v1/health/', health_check, name='health_v1'),
+
     # API endpoints
     path('api/v1/', include('api.urls')),
     
     # Swagger Documentation
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    
-    # Health check (Direct 200 OK, no redirect)
-    path('api/health/', health_check, name='health_check_main'),
 ]
 
 # Serve static and media (development and production)

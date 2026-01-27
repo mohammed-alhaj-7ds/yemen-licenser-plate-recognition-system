@@ -162,6 +162,13 @@ function About() {
                 <div className="team-name">Ali Al-Nusairi</div>
                 <div className="team-role">ML Engineer</div>
               </div>
+              <div className="team-member">
+                <div className="team-avatar">👨‍💻</div>
+                <div className="team-name">Al-Ezz Al-Mahjary</div>
+                <div className="team-role">
+                  Team Lead & Full Stack & ML Engineer
+                </div>
+              </div>
             </div>
           </div>
 

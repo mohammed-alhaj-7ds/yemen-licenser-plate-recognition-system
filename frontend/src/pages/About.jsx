@@ -99,7 +99,7 @@ function About() {
             <div className="tech-grid">
               <div className="tech-item">
                 <div className="tech-icon">🐍</div>
-                <h3>Python & Deep Learning</h3>
+                <h3>Python & Deep Learning & Computer vision</h3>
                 <p>PyTorch, Ultralytics YOLOv8, OpenCV, NumPy</p>
               </div>
               <div className="tech-item">

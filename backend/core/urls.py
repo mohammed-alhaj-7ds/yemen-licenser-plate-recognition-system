@@ -7,9 +7,7 @@ from django.conf.urls.static import static
 from django.shortcuts import redirect
 from django.views.generic import TemplateView
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
-
-def home_redirect(request):
-    return redirect('/api/v1/health/')
+from api.views import health_check
 
 urlpatterns = [
     # API endpoints
@@ -19,8 +17,8 @@ urlpatterns = [
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
     
-    # Health check alias
-    path('api/health/', home_redirect),
+    # Health check (Direct 200 OK, no redirect)
+    path('api/health/', health_check, name='health_check_main'),
 ]
 
 # Serve static and media (development and production)

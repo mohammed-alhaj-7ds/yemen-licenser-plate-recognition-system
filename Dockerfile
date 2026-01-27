@@ -77,6 +77,10 @@ RUN python manage.py collectstatic --noinput
 # Expose Port
 EXPOSE $PORT
 
+# Healthcheck
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
+  CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8080'); urllib.request.urlopen(f'http://127.0.0.1:{port}/api/v1/health/')" || exit 1
+
 # Start Command
 # Using shell form to allow variable expansion of $PORT
 CMD gunicorn core.wsgi:application -b 0.0.0.0:${PORT:-8080} --workers 3 --timeout 300

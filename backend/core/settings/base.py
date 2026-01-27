@@ -68,7 +68,6 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 # Add frontend build assets to staticfiles dirs
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR.parent, "static"),
     os.path.join(BASE_DIR, "static"),  # Docker copies assets here
 ]
 

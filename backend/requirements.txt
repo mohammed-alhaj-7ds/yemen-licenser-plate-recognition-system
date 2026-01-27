@@ -21,7 +21,9 @@ whitenoise==6.6.0
 
 # Image Processing (HEADLESS - no system deps)
 Pillow==10.2.0
-opencv-python-headless==4.9.0.80
+# opencv-python-headless is removed to avoid conflict with opencv-python pulled by ultralytics
+# Dockerfile installs libgl1 to support standard opencv-python
+
 numpy==1.26.3
 
 # AI/ML (CPU-compatible)

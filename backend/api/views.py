@@ -9,15 +9,14 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 
-from .services import PlateRecognitionService, ResponseFormatter
+from .services import ResponseFormatter
 from .models import APIKey
 from .upload_validation import validate_image_upload, validate_video_upload
 import secrets
 
 DEBUG_KEYS = {"debug_info", "debug_url", "region_paths", "processing_metadata", "raw_reads"}
 
-# Initialize service
-plate_service = PlateRecognitionService()
+# Initialize formatter (safe, no AI deps)
 formatter = ResponseFormatter()
 
 
@@ -34,8 +33,8 @@ def _strip_debug(data):
 
 @api_view(['GET'])
 def health_check(request):
-    """Health check endpoint."""
-    return Response(formatter.health_check(model_loaded=True))
+    """Health check endpoint. NO AI LOADING HERE."""
+    return Response(formatter.health_check(model_loaded=False))
 
 
 @api_view(['POST'])
@@ -43,15 +42,14 @@ def health_check(request):
 def predict_image(request):
     """
     Process an image for license plate detection.
-    
-    POST /api/v1/predict/image/
-    - file: Image file (JPEG, PNG, WebP)
-    - overlay: Whether to generate annotated image (default: true)
-    - X-API-Key: API key for authentication (optional during development)
     """
     if "file" not in request.FILES:
         body, sc = formatter.error("No file provided", "Please provide an image file in the 'file' field")
         return Response(body, status=sc)
+
+    # Lazy import to prevent startup bottlenecks
+    from .services import PlateRecognitionService
+    plate_service = PlateRecognitionService()
 
     uploaded_file = request.FILES["file"]
     err, sc = validate_image_upload(uploaded_file)
@@ -317,15 +315,14 @@ def create_api_key(request):
 def predict_video(request):
     """
     Process a video for license plate detection.
-    
-    POST /api/v1/predict/video/
-    - file: Video file (MP4, AVI, MOV)
-    - skip_frames: Process every nth frame (default: 2)
-    - X-API-Key: API key for authentication (optional during development)
     """
     if "file" not in request.FILES:
         body, sc = formatter.error("No file provided", "Please provide a video file in the 'file' field")
         return Response(body, status=sc)
+
+    # Lazy import to prevent startup bottlenecks
+    from .services import PlateRecognitionService
+    plate_service = PlateRecognitionService()
 
     uploaded_file = request.FILES["file"]
     err, sc = validate_video_upload(uploaded_file)

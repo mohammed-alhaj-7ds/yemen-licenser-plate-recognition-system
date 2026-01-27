@@ -12,6 +12,7 @@ CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
     default=["http://localhost", "http://127.0.0.1", "https://localhost", "https://127.0.0.1"],
 )
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
 
 # Logging: disable verbose/unnecessary logs
 LOGGING = {

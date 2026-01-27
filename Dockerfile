@@ -48,9 +48,11 @@ RUN apt-get update \
        ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install Python Deps
+# Install Python dependencies
 COPY backend/requirements.txt ./requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt \
+    && pip uninstall -y opencv-python-headless \
+    && pip install --no-cache-dir opencv-python
 
 # Copy Project Code
 COPY backend/ ./backend/

@@ -9,7 +9,7 @@ from rest_framework.parsers import MultiPartParser, JSONParser
 from rest_framework.response import Response
 from rest_framework import status
 
-from .utils import ResponseFormatter
+from .services import ResponseFormatter
 from .models import APIKey
 from .upload_validation import validate_image_upload, validate_video_upload
 import secrets
@@ -41,18 +41,21 @@ def health_check(request):
 @parser_classes([MultiPartParser])
 def predict_image(request):
     """
+    Process an image for license plate detection.
+    """
+    if "file" not in request.FILES:
+        body, sc = formatter.error("No file provided", "Please provide an image file in the 'file' field")
+        return Response(body, status=sc)
 
     # Lazy import to prevent startup bottlenecks
     from .services import PlateRecognitionService
     plate_service = PlateRecognitionService()
 
     uploaded_file = request.FILES["file"]
-    
-    # Validate uploaded file (check extension/content)
     err, sc = validate_image_upload(uploaded_file)
-    if err:
-         body, _ = formatter.error(err["error"], err.get("message", ""), sc)
-         return Response(body, status=sc)
+    if err is not None:
+        body, _ = formatter.error(err["error"], err.get("message", ""), sc)
+        return Response(body, status=sc)
 
     overlay = request.data.get("overlay", "true").lower() == "true"
 

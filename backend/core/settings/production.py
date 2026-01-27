@@ -2,7 +2,6 @@
 Django production settings.
 """
 from .base import *  # noqa: F401, F403
-print("DEBUG: Loading production.py settings...")
 
 DEBUG = False
 ALLOWED_HOSTS = ["*"]
@@ -14,13 +13,7 @@ CORS_ALLOWED_ORIGINS = env.list(
     default=["https://*.railway.app"],
 )
 # Allow Railway domains for CSRF (POST requests)
-# Allow Railway domains for CSRF (POST requests)
 CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
-env_trusted_origins = env.list("CSRF_TRUSTED_ORIGINS", default=[])
-CSRF_TRUSTED_ORIGINS.extend(env_trusted_origins)
-
-# Ensure SECURE_PROXY_SSL_HEADER is set for Railway
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Logging: disable verbose/unnecessary logs
 LOGGING = {
@@ -35,19 +28,7 @@ LOGGING = {
     },
 }
 
-# Production Middleware (Cleaned)
-MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
-    "whitenoise.middleware.WhiteNoiseMiddleware",
-    "django.middleware.common.CommonMiddleware",
-    "api.middleware.SafeExceptionMiddleware",
-]
-
 # Security headers (applied via middleware or Nginx)
 SECURE_X_FRAME_OPTIONS = "DENY"
 X_FRAME_OPTIONS = "DENY"
 SECURE_CONTENT_TYPE_NOSNIFF = True
-
-# Static files safety (Prevent crash if manifest missing)
-WHITENOISE_MANIFEST_STRICT = False
-WHITENOISE_USE_FINDERS = True

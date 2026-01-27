@@ -27,11 +27,7 @@ RUN if [ "$BUILD_FRONTEND" = "true" ]; then \
 # --- Stage 2: Backend Runtime ---
 FROM python:3.11-slim
 
-# Environment Configuration
-ENV PYTHONUNBUFFERED=1 \
-    PYTHONDONTWRITEBYTECODE=1 \
-    PORT=8080 \
-    DJANGO_SETTINGS_MODULE=core.settings.production
+# Build Arguments
 ARG BUILD_FRONTEND=true
 
 # Environment
@@ -90,5 +86,5 @@ EXPOSE $PORT
 HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 \
   CMD python -c "import urllib.request, os; port = os.environ.get('PORT', '8080'); urllib.request.urlopen(f'http://127.0.0.1:{port}/api/v1/health/')" || exit 1
 
-# Run with gunicorn (Sync workers + Preload for eager crash reporting)
-CMD gunicorn core.wsgi:application -b 0.0.0.0:${PORT:-8080} --workers 1 --threads 8 --timeout 300 --graceful-timeout 30 --log-level info --access-logfile -
+# Run with gunicorn (Sync workers for stability with heavy AI libraries)
+CMD gunicorn core.wsgi:application -b 0.0.0.0:${PORT:-8080} --workers 1 --threads 8 --timeout 300 --log-level debug

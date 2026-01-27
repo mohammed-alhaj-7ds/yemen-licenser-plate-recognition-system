@@ -13,9 +13,7 @@ env = environ.Env(
 )
 
 # Read .env if available
-env_file = os.path.join(BASE_DIR.parent, ".env")
-if os.path.exists(env_file):
-    environ.Env.read_env(env_file)
+environ.Env.read_env(os.path.join(BASE_DIR.parent, ".env"))
 
 SECRET_KEY = env("SECRET_KEY")
 DEBUG = env.bool("DEBUG", default=False)

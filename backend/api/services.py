@@ -4,7 +4,7 @@ Separated from views for better organization and testability
 """
 import os
 import uuid
-# import cv2  <-- Lazy loaded in methods
+import cv2
 from datetime import datetime
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
@@ -20,11 +20,9 @@ class PlateRecognitionService:
     """Service for handling plate recognition operations"""
     
     def __init__(self):
-        from pathlib import Path
-        media_root = Path(settings.MEDIA_ROOT)
-        self.upload_dir = media_root / 'uploads'
-        self.results_dir = media_root / 'results'
-        self.videos_dir = media_root / 'results'
+        self.upload_dir = settings.MEDIA_ROOT / 'uploads'
+        self.results_dir = settings.MEDIA_ROOT / 'results'
+        self.videos_dir = settings.MEDIA_ROOT / 'results'
         
         # Create directories if they don't exist
         for dir_path in [self.upload_dir, self.results_dir, self.videos_dir]:
@@ -51,7 +49,6 @@ class PlateRecognitionService:
         Returns:
             Output filename if successful, None otherwise
         """
-        import cv2
         img = cv2.imread(str(image_path))
         if img is None:
             return None
@@ -175,4 +172,42 @@ class PlateRecognitionService:
             raise
 
 
-# ResponseFormatter moved to .utils to avoid circular/heavy imports
+class ResponseFormatter:
+    """Unified response formatter for API endpoints"""
+    
+    @staticmethod
+    def success(data: Dict, message: Optional[str] = None) -> Dict:
+        """Format successful response"""
+        response = {
+            "success": True,
+            "data": data,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        if message:
+            response["message"] = message
+        return response
+    
+    @staticmethod
+    def error(
+        error: str, 
+        message: Optional[str] = None, 
+        status_code: int = 400
+    ) -> Tuple[Dict, int]:
+        """Format error response"""
+        response = {
+            "success": False,
+            "error": error,
+            "timestamp": datetime.utcnow().isoformat()
+        }
+        if message:
+            response["message"] = message
+        return response, status_code
+    
+    @staticmethod
+    def health_check(model_loaded: bool = True) -> Dict:
+        """Format health check response"""
+        return {
+            "status": "ok",
+            "timestamp": datetime.utcnow().isoformat(),
+            "model_loaded": model_loaded
+        }

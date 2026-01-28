@@ -1,4 +1,5 @@
 """
+<<<<<<< HEAD
 API Key Authentication and Rate Limiting for Yemen LPR System
 """
 
@@ -18,10 +19,22 @@ logger = logging.getLogger(__name__)
 class SecurityHeadersMiddleware:
     """Add X-Frame-Options, CSP when not DEBUG."""
 
+=======
+Safe Exception Handling Middleware
+Catches 500 errors and returns safe JSON responses.
+"""
+from django.http import JsonResponse
+import logging
+
+logger = logging.getLogger(__name__)
+
+class SafeExceptionMiddleware:
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
+<<<<<<< HEAD
         response = self.get_response(request)
         if not settings.DEBUG and hasattr(response, "headers"):
             response.setdefault("X-Frame-Options", "DENY")
@@ -116,3 +129,13 @@ class APIKeyMiddleware:
 
         return self.get_response(request)
 
+=======
+        return self.get_response(request)
+
+    def process_exception(self, request, exception):
+        logger.error(f"Internal Server Error: {str(exception)}", exc_info=True)
+        return JsonResponse({
+            "error": "internal_error",
+            "message": "An internal error occurred. Our team has been notified."
+        }, status=500)
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9

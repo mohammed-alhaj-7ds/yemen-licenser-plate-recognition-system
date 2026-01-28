@@ -99,7 +99,11 @@ function About() {
             <div className="tech-grid">
               <div className="tech-item">
                 <div className="tech-icon">🐍</div>
+<<<<<<< HEAD
                 <h3>Python & Deep Learning</h3>
+=======
+                <h3>Python & Deep Learning & Computer vision</h3>
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
                 <p>PyTorch, Ultralytics YOLOv8, OpenCV, NumPy</p>
               </div>
               <div className="tech-item">
@@ -133,7 +137,13 @@ function About() {
               <div className="team-member highlight">
                 <div className="team-avatar">👨‍💻</div>
                 <div className="team-name">Mohamed Mohamed Yahya Al-Hajj</div>
+<<<<<<< HEAD
                 <div className="team-role">Team Lead & Full Stack</div>
+=======
+                <div className="team-role">
+                  Team Lead & Full Stack & ML Engineer
+                </div>
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
               </div>
               <div className="team-member">
                 <div className="team-avatar">👨‍💻</div>
@@ -160,6 +170,16 @@ function About() {
                 <div className="team-name">Ali Al-Nusairi</div>
                 <div className="team-role">ML Engineer</div>
               </div>
+<<<<<<< HEAD
+=======
+              <div className="team-member">
+                <div className="team-avatar">👨‍💻</div>
+                <div className="team-name">Al-Ezz Al-Mahjary</div>
+                <div className="team-role">
+                  Team Lead & Full Stack & ML Engineer
+                </div>
+              </div>
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
             </div>
           </div>
 

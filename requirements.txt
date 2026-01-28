@@ -11,3 +11,11 @@ python-multipart>=0.0.6
 
 # Utilities
 Pillow>=10.0.0
+<<<<<<< HEAD
+=======
+
+django
+djangorestframework
+torch
+python-dotenv
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9

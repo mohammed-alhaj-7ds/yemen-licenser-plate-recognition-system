@@ -1,7 +1,19 @@
+<<<<<<< HEAD
+=======
+# =============================================
+# Yemen LPR - Backend Requirements
+# =============================================
+# Production-safe: NO system dependencies needed
+# Uses opencv-python-headless (no GUI/X11)
+# =============================================
+
+# Django Core
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
 Django==5.0.1
 djangorestframework==3.14.0
 django-cors-headers==4.3.1
 django-environ==0.11.2
+<<<<<<< HEAD
 drf-spectacular==0.27.1
 drf-spectacular-sidecar==2024.2.1
 gunicorn==21.2.0
@@ -15,3 +27,31 @@ torch==2.1.2
 torchvision
 psutil
 pytest
+=======
+
+# API Documentation
+drf-spectacular==0.27.1
+drf-spectacular-sidecar==2024.2.1
+
+# Production Server
+gunicorn==21.2.0
+whitenoise==6.6.0
+
+# Image Processing (HEADLESS - no system deps)
+Pillow==10.2.0
+# opencv-python-headless is removed to avoid conflict with opencv-python pulled by ultralytics
+# Dockerfile installs libgl1 to support standard opencv-python
+
+numpy==1.26.3
+
+# AI/ML (CPU-compatible)
+ultralytics==8.1.9
+easyocr==1.7.1
+torch==2.1.2+cpu
+torchvision==0.16.2+cpu
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+# Utilities
+psutil
+requests
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9

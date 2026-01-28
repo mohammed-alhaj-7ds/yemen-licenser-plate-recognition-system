@@ -4,14 +4,25 @@ Django production settings.
 from .base import *  # noqa: F401, F403
 
 DEBUG = False
+<<<<<<< HEAD
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["localhost", "127.0.0.1"])
+=======
+ALLOWED_HOSTS = ["*"]
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
 
 # CORS: restrict origins in production
 CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = env.list(
     "CORS_ALLOWED_ORIGINS",
+<<<<<<< HEAD
     default=["http://localhost", "http://127.0.0.1", "https://localhost", "https://127.0.0.1"],
 )
+=======
+    default=["https://*.railway.app"],
+)
+# Allow Railway domains for CSRF (POST requests)
+CSRF_TRUSTED_ORIGINS = ["https://*.railway.app"]
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
 
 # Logging: disable verbose/unnecessary logs
 LOGGING = {

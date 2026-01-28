@@ -15,8 +15,11 @@ from django.conf import settings
 # Add parent directory to path for AI imports
 sys.path.insert(0, str(settings.BASE_DIR.parent))
 
+<<<<<<< HEAD
 from ai.pipeline import process_image, process_video
 
+=======
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
 
 class PlateRecognitionService:
     """Service for handling plate recognition operations"""
@@ -88,6 +91,12 @@ class PlateRecognitionService:
         Returns:
             Dictionary with results and metadata
         """
+<<<<<<< HEAD
+=======
+        # Lazy import inside the method to prevent startup loading
+        from ai.pipeline import process_image
+        
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
         path, _ = self.save_uploaded_file(uploaded_file, keep_original=True)
         try:
             results = process_image(
@@ -132,6 +141,12 @@ class PlateRecognitionService:
         Returns:
             Dictionary with results and metadata
         """
+<<<<<<< HEAD
+=======
+        # Lazy import inside the method
+        from ai.pipeline import process_video
+
+>>>>>>> 1ac0cac23aeaa4d1df9946be393595cfb8b764f9
         ext = os.path.splitext(uploaded_file.name)[1] or ".mp4"
         fn = f"original_video_{uuid.uuid4().hex}{ext}"
         tmp_path = self.upload_dir / fn

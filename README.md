@@ -375,14 +375,6 @@ YOLO_DETECT_MODEL_PATH=ai/models/plate_detect.pt
 
 ---
 
-## 👥 Team
-
-| Role       | Name              |
-| ---------- | ----------------- |
-| Developer  | [Your Name]       |
-| Supervisor | [Supervisor Name] |
-| University | [University Name] |
-
 ---
 
 ## 📄 License

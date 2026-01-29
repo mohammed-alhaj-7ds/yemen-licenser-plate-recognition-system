@@ -377,10 +377,6 @@ YOLO_DETECT_MODEL_PATH=ai/models/plate_detect.pt
 
 ---
 
-## 📄 License
-
-Academic Project - All Rights Reserved.
-
 ---
 
 <div align="center">
